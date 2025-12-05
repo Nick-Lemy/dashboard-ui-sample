@@ -7,7 +7,7 @@ export default function AdminLayout({
 }>) {
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="flex-shrink-0 hidden md:block">
+      <div className="shrink-0 hidden md:block">
         <SideBar />
       </div>
       <div className="md:hidden">

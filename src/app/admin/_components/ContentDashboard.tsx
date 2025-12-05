@@ -20,6 +20,8 @@ import {
   CartesianGrid,
   Tooltip as RechartsTooltip,
   ResponsiveContainer,
+  BarChart,
+  Bar,
 } from "recharts";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import PeopleIcon from "@mui/icons-material/People";
@@ -138,9 +140,18 @@ const chartPaths = [
   },
 ];
 
+const transactionData = [
+  { day: "Su", value: 612, fullDay: "Sunday" },
+  { day: "Mo", value: 824, fullDay: "Monday" },
+  { day: "Tu", value: 503, fullDay: "Tuesday" },
+  { day: "We", value: 945, fullDay: "Wednesday" },
+  { day: "Th", value: 721, fullDay: "Thursday" },
+  { day: "Fr", value: 1056, fullDay: "Friday" },
+  { day: "Sa", value: 892, fullDay: "Saturday" },
+];
+
 export default function ContentDashboard() {
   const [activeTab, setActiveTab] = useState(2);
-  const [hoveredBar, setHoveredBar] = useState<number | null>(null);
   const currentChart = chartPaths[activeTab];
 
   return (
@@ -148,6 +159,7 @@ export default function ContentDashboard() {
       sx={{
         minHeight: "100vh",
         pt: { xs: 10, md: 4 },
+        paddingX: 4,
       }}
     >
       <Box
@@ -472,106 +484,42 @@ export default function ContentDashboard() {
                 </Typography>
               </Box>
               <Typography variant="caption">...</Typography>
+              <Typography variant="caption">...</Typography>
             </Box>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              {/* Y-axis numbers */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  height: 150,
-                  pr: 1,
-                }}
-              >
-                {[1000, 800, 600, 400, 200, 0].map((num) => (
-                  <Typography
-                    key={num}
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ fontSize: 9, lineHeight: 1 }}
-                  >
-                    {num}
-                  </Typography>
-                ))}
-              </Box>
-              {/* Chart bars */}
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  alignItems: "flex-end",
-                  gap: 1,
-                  height: 150,
-                }}
-              >
-                {[
-                  { height: 60, value: 612, day: "Sunday" },
-                  { height: 80, value: 824, day: "Monday" },
-                  { height: 50, value: 503, day: "Tuesday" },
-                  { height: 90, value: 945, day: "Wednesday" },
-                  { height: 70, value: 721, day: "Thursday" },
-                  { height: 100, value: 1056, day: "Friday" },
-                  { height: 85, value: 892, day: "Saturday" },
-                ].map((bar, idx) => (
-                  <Tooltip
-                    key={idx}
-                    title={
-                      <Box sx={{ p: 0.5 }}>
-                        <Typography
-                          variant="caption"
-                          sx={{ fontWeight: "bold", display: "block" }}
-                        >
-                          {bar.day}
-                        </Typography>
-                        <Typography variant="caption">
-                          {bar.value} transactions
-                        </Typography>
-                      </Box>
-                    }
-                    arrow
-                    placement="top"
-                  >
-                    <Box
-                      onMouseEnter={() => setHoveredBar(idx)}
-                      onMouseLeave={() => setHoveredBar(null)}
-                      sx={{
-                        flex: 1,
-                        bgcolor: hoveredBar === idx ? "#4f46e5" : "#6366f1",
-                        borderRadius: "4px 4px 0 0",
-                        height: `${bar.height}%`,
-                        cursor: "pointer",
-                        transition: "all 0.3s",
-                        animation: `growHeight 0.8s ease-out ${
-                          idx * 0.1
-                        }s both`,
-                        "@keyframes growHeight": {
-                          from: {
-                            height: "0%",
-                          },
-                          to: {
-                            height: `${bar.height}%`,
-                          },
-                        },
-                      }}
-                    />
-                  </Tooltip>
-                ))}
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mt: 1,
-                pl: 4,
-              }}
-            >
-              {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                <Typography key={day} variant="caption" color="text.secondary">
-                  {day}
-                </Typography>
-              ))}
+            <Box sx={{ height: 180, mt: 2 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={transactionData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis
+                    dataKey="day"
+                    tick={{ fontSize: 11, fill: "#6b7280" }}
+                    axisLine={{ stroke: "#e5e7eb" }}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: "#6b7280" }}
+                    axisLine={{ stroke: "#e5e7eb" }}
+                    tickFormatter={(value) => value.toLocaleString()}
+                  />
+                  <RechartsTooltip
+                    contentStyle={{
+                      backgroundColor: "#1f2937",
+                      border: "none",
+                      borderRadius: "8px",
+                      color: "white",
+                    }}
+                    formatter={(value: any, name: any, props: any) => [
+                      `${value} transactions`,
+                      props.payload.fullDay,
+                    ]}
+                  />
+                  <Bar
+                    dataKey="value"
+                    fill="#6366f1"
+                    radius={[4, 4, 0, 0]}
+                    activeBar={{ fill: "#4f46e5" }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </Box>
           </Paper>
         </Grow>

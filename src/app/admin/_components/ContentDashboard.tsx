@@ -502,7 +502,14 @@ export default function ContentDashboard() {
               ))}
             </Box>
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1, pl: 4 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mt: 1,
+              pl: 4,
+            }}
+          >
             {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
               <Typography key={day} variant="caption" color="text.secondary">
                 {day}

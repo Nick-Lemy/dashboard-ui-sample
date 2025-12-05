@@ -16,9 +16,6 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 const menuItems = [
   { label: "Overview", icon: BarChartIcon, active: true },
-  { label: "A&R Data", icon: PeopleIcon },
-  { label: "Challenges", icon: EmojiEventsIcon },
-  { label: "Songs", icon: MusicNoteIcon },
   { label: "Users", icon: PersonIcon },
   { label: "Settings", icon: SettingsIcon },
 ];

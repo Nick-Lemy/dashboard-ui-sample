@@ -15,7 +15,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 const menuItems = [
   { label: "Overview", icon: BarChartIcon, path: "/admin" },
   { label: "Users", icon: PersonIcon, path: "/admin/users" },
-  { label: "Settings", icon: SettingsIcon, path: "/admin/settings" },
+  //   { label: "Settings", icon: SettingsIcon, path: "/admin/settings" },
 ];
 
 export default function SideBar() {

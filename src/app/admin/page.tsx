@@ -1,12 +1,15 @@
+import ContentDashboard from "./_components/ContentDashboard";
 import SideBar from "./_components/SideBar";
 
 export default function AdminPage() {
   return (
-    <div>
-      <div className="w-2/5">
+    <div className="flex">
+      <div>
         <SideBar />
       </div>
-      <div></div>
+      <div className="bg-zinc-200 w-full">
+        <ContentDashboard />
+      </div>
     </div>
   );
 }

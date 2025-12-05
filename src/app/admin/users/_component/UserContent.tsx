@@ -14,7 +14,20 @@ import {
   Chip,
   Fade,
   Grow,
+  TextField,
+  InputAdornment,
+  IconButton,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  useTheme,
 } from "@mui/material";
+import { useState, useMemo } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 const userData = [
   {
@@ -108,13 +121,44 @@ const pieChartData = [
 ];
 
 export default function UserContent() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [sortBy, setSortBy] = useState("name");
+  const [darkMode, setDarkMode] = useState(false);
+
+  const filteredUsers = useMemo(() => {
+    return userData
+      .filter((user) => {
+        const matchesSearch =
+          user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStatus =
+          statusFilter === "All" || user.status === statusFilter;
+        return matchesSearch && matchesStatus;
+      })
+      .sort((a, b) => {
+        if (sortBy === "name") return a.name.localeCompare(b.name);
+        if (sortBy === "email") return a.email.localeCompare(b.email);
+        if (sortBy === "joined")
+          return new Date(b.joined).getTime() - new Date(a.joined).getTime();
+        if (sortBy === "transactions") return b.tracks - a.tracks;
+        return 0;
+      });
+  }, [searchQuery, statusFilter, sortBy]);
+
+  const bgColor = darkMode ? "#1a1a1a" : "#f3f4f6";
+  const paperBg = darkMode ? "#2d2d2d" : "#ffffff";
+  const textColor = darkMode ? "#e5e7eb" : "#000000";
+  const textSecondary = darkMode ? "#9ca3af" : "text.secondary";
+
   return (
     <Box
       sx={{
         p: { xs: 2, sm: 3, md: 4 },
-        bgcolor: "#f3f4f6",
+        bgcolor: bgColor,
         minHeight: "100vh",
         pt: { xs: 10, md: 4 },
+        transition: "background-color 0.3s",
       }}
     >
       <Box
@@ -132,15 +176,23 @@ export default function UserContent() {
           sx={{
             fontWeight: "bold",
             fontSize: { xs: "1.5rem", md: "2.125rem" },
+            color: textColor,
           }}
         >
           Clients
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {/* <IconButton
+            onClick={() => setDarkMode(!darkMode)}
+            sx={{ color: textColor }}
+          >
+            {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+          </IconButton> */}
           <Typography
             sx={{
               display: { xs: "none", sm: "block" },
               fontSize: { sm: "0.875rem", md: "1rem" },
+              color: textColor,
             }}
           >
             nicklemykayiranga@gmail.com
@@ -164,7 +216,14 @@ export default function UserContent() {
       >
         {statsData.map((stat, idx) => (
           <Grow in timeout={600 + idx * 200} key={idx}>
-            <Paper sx={{ p: 3, borderRadius: 2, textAlign: "center" }}>
+            <Paper
+              sx={{
+                p: 3,
+                borderRadius: 2,
+                textAlign: "center",
+                bgcolor: paperBg,
+              }}
+            >
               <Box sx={{ position: "relative", display: "inline-flex", mb: 2 }}>
                 <svg width="120" height="120" viewBox="0 0 120 120">
                   <circle
@@ -217,10 +276,13 @@ export default function UserContent() {
                   </Typography>
                 </Box>
               </Box>
-              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: "bold", mb: 0.5, color: textColor }}
+              >
                 {stat.value}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" sx={{ color: textSecondary }}>
                 {stat.label}
               </Typography>
             </Paper>
@@ -229,8 +291,11 @@ export default function UserContent() {
 
         {/* Pie Chart */}
         <Grow in timeout={1000}>
-          <Paper sx={{ p: 3, borderRadius: 2 }}>
-            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+          <Paper sx={{ p: 3, borderRadius: 2, bgcolor: paperBg }}>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", color: textColor }}
+            >
               Account Tiers
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -279,7 +344,10 @@ export default function UserContent() {
                         bgcolor: segment.color,
                       }}
                     />
-                    <Typography variant="caption" sx={{ fontSize: 11 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ fontSize: 11, color: textColor }}
+                    >
                       {segment.label}: {segment.percentage}%
                     </Typography>
                   </Box>
@@ -289,24 +357,98 @@ export default function UserContent() {
           </Paper>
         </Grow>
       </Box>
-
+      {/* Search and Filters */}
+      <Paper sx={{ p: 2, mb: 3, borderRadius: 2, bgcolor: paperBg }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 2,
+            alignItems: { xs: "stretch", md: "center" },
+          }}
+        >
+          <TextField
+            placeholder="Search by name or email..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              flex: 1,
+              "& .MuiOutlinedInput-root": {
+                bgcolor: darkMode ? "#1a1a1a" : "#fff",
+                color: textColor,
+              },
+              "& .MuiInputLabel-root": { color: textSecondary },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: textSecondary }} />
+                </InputAdornment>
+              ),
+            }}
+            size="small"
+          />
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel sx={{ color: textSecondary }}>Status</InputLabel>
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              label="Status"
+              sx={{
+                bgcolor: darkMode ? "#1a1a1a" : "#fff",
+                color: textColor,
+              }}
+            >
+              <MenuItem value="All">All Status</MenuItem>
+              <MenuItem value="Active">Active</MenuItem>
+              <MenuItem value="Inactive">Inactive</MenuItem>
+              <MenuItem value="Pending">Pending</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel sx={{ color: textSecondary }}>Sort By</InputLabel>
+            <Select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              label="Sort By"
+              sx={{
+                bgcolor: darkMode ? "#1a1a1a" : "#fff",
+                color: textColor,
+              }}
+            >
+              <MenuItem value="name">Name</MenuItem>
+              <MenuItem value="email">Email</MenuItem>
+              <MenuItem value="joined">Recently Joined</MenuItem>
+              <MenuItem value="transactions">Most Transactions</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </Paper>
       {/* Users Table */}
       <Fade in timeout={1200}>
-        <Paper sx={{ borderRadius: 2, overflow: "hidden" }}>
-          <Box sx={{ p: { xs: 2, md: 3 }, borderBottom: "1px solid #e5e7eb" }}>
+        <Paper sx={{ borderRadius: 2, overflow: "hidden", bgcolor: paperBg }}>
+          <Box
+            sx={{
+              p: { xs: 2, md: 3 },
+              borderBottom: `1px solid ${darkMode ? "#444" : "#e5e7eb"}`,
+            }}
+          >
             <Typography
               variant="h6"
               sx={{
                 fontWeight: "bold",
                 fontSize: { xs: "1rem", md: "1.25rem" },
+                color: textColor,
               }}
             >
-              All Clients
+              All Clients ({filteredUsers.length})
             </Typography>
             <Typography
               variant="caption"
-              color="text.secondary"
-              sx={{ fontSize: { xs: "0.7rem", md: "0.75rem" } }}
+              sx={{
+                fontSize: { xs: "0.7rem", md: "0.75rem" },
+                color: textSecondary,
+              }}
             >
               Manage and view all registered clients
             </Typography>
@@ -314,22 +456,34 @@ export default function UserContent() {
           <TableContainer sx={{ overflowX: "auto" }}>
             <Table>
               <TableHead>
-                <TableRow sx={{ bgcolor: "#f9fafb" }}>
-                  <TableCell sx={{ fontWeight: "bold" }}>Client</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>
+                <TableRow sx={{ bgcolor: darkMode ? "#3a3a3a" : "#f9fafb" }}>
+                  <TableCell sx={{ fontWeight: "bold", color: textColor }}>
+                    Client
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: textColor }}>
+                    Email
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: textColor }}>
+                    Status
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: textColor }}>
                     Transactions
                   </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Portfolio</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Joined</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: textColor }}>
+                    Portfolio
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: textColor }}>
+                    Joined
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {userData.map((user) => (
+                {filteredUsers.map((user) => (
                   <TableRow
                     key={user.id}
-                    sx={{ "&:hover": { bgcolor: "#f9fafb" } }}
+                    sx={{
+                      "&:hover": { bgcolor: darkMode ? "#3a3a3a" : "#f9fafb" },
+                    }}
                   >
                     <TableCell>
                       <Box
@@ -340,13 +494,16 @@ export default function UserContent() {
                         >
                           {user.name.charAt(0)}
                         </Avatar>
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 500, color: textColor }}
+                        >
                           {user.name}
                         </Typography>
                       </Box>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" sx={{ color: textSecondary }}>
                         {user.email}
                       </Typography>
                     </TableCell>
@@ -372,13 +529,17 @@ export default function UserContent() {
                       />
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">{user.tracks}</Typography>
+                      <Typography variant="body2" sx={{ color: textColor }}>
+                        {user.tracks}
+                      </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">{user.followers}</Typography>
+                      <Typography variant="body2" sx={{ color: textColor }}>
+                        {user.followers}
+                      </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" sx={{ color: textSecondary }}>
                         {user.joined}
                       </Typography>
                     </TableCell>

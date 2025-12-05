@@ -8,9 +8,6 @@ import {
   ListItemText,
 } from "@mui/material";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import PeopleIcon from "@mui/icons-material/People";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 

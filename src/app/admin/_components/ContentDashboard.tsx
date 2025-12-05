@@ -457,27 +457,52 @@ export default function ContentDashboard() {
             </Box>
             <Typography variant="caption">...</Typography>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-end",
-              gap: 1,
-              height: 150,
-            }}
-          >
-            {[60, 80, 50, 90, 70, 100, 85].map((height, idx) => (
-              <Box
-                key={idx}
-                sx={{
-                  flex: 1,
-                  bgcolor: "#6366f1",
-                  borderRadius: "4px 4px 0 0",
-                  height: `${height}%`,
-                }}
-              />
-            ))}
+          <Box sx={{ display: "flex", gap: 1 }}>
+            {/* Y-axis numbers */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: 150,
+                pr: 1,
+              }}
+            >
+              {[1000, 800, 600, 400, 200, 0].map((num) => (
+                <Typography
+                  key={num}
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ fontSize: 9, lineHeight: 1 }}
+                >
+                  {num}
+                </Typography>
+              ))}
+            </Box>
+            {/* Chart bars */}
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                alignItems: "flex-end",
+                gap: 1,
+                height: 150,
+              }}
+            >
+              {[60, 80, 50, 90, 70, 100, 85].map((height, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    flex: 1,
+                    bgcolor: "#6366f1",
+                    borderRadius: "4px 4px 0 0",
+                    height: `${height}%`,
+                  }}
+                />
+              ))}
+            </Box>
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1, pl: 4 }}>
             {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
               <Typography key={day} variant="caption" color="text.secondary">
                 {day}

@@ -2,69 +2,77 @@
 
 import { Box, Typography, Paper, Tab, Tabs, Avatar } from "@mui/material";
 import { useState } from "react";
-import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import PeopleIcon from "@mui/icons-material/People";
-import CreateIcon from "@mui/icons-material/Create";
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
 const kpiData = [
   {
-    icon: MusicNoteIcon,
-    value: "278.42K",
-    label: "Tracks Created",
-    color: "#6366f1",
-  },
-  { icon: PeopleIcon, value: "2.05M", label: "Active Users", color: "#6366f1" },
-  {
-    icon: CreateIcon,
-    value: "160.17K",
-    label: "Active Creators",
+    icon: AttachMoneyIcon,
+    value: "$2.84M",
+    label: "Total Revenue",
     color: "#6366f1",
   },
   {
-    icon: PlayCircleIcon,
-    value: "7.11M",
-    label: "Total Plays",
+    icon: PeopleIcon,
+    value: "15.2K",
+    label: "Active Clients",
+    color: "#6366f1",
+  },
+  {
+    icon: SwapHorizIcon,
+    value: "8,547",
+    label: "Transactions",
+    color: "#6366f1",
+  },
+  {
+    icon: TrendingUpIcon,
+    value: "$487K",
+    label: "Monthly Revenue",
     color: "#6366f1",
   },
   {
     icon: PersonAddIcon,
-    value: "257.34K",
-    label: "New Users",
+    value: "1,234",
+    label: "New Clients",
     color: "#6366f1",
   },
 ];
 
 const trendingTracks = [
   {
-    title: "Rebel of the Industry",
-    artist: "Systovis",
-    plays: "3.49K plays",
-    likes: "232 likes",
-    image: "🎵",
+    title: "Premium Account",
+    artist: "Enterprise Plan",
+    plays: "$45.2K revenue",
+    likes: "156 clients",
+    icon: WorkspacePremiumIcon,
   },
   {
-    title: "WokStar",
-    artist: "NFS Gwano",
-    plays: "2.03K plays",
-    likes: "107 likes",
-    image: "🎵",
+    title: "Business Account",
+    artist: "Pro Plan",
+    plays: "$28.5K revenue",
+    likes: "89 clients",
+    icon: BusinessCenterIcon,
   },
   {
-    title: "Way Out",
-    artist: "CJ Sunrayside",
-    plays: "1.94K plays",
-    likes: "148 likes",
-    image: "🎵",
+    title: "Starter Account",
+    artist: "Basic Plan",
+    plays: "$12.8K revenue",
+    likes: "245 clients",
+    icon: RocketLaunchIcon,
   },
 ];
 
 const trendingUsers = [
-  { name: "Systovis", followers: "107.8K followers" },
-  { name: "Jayzo Jordan", followers: "28K followers" },
-  { name: "Itz Me Bang", followers: "19.6K followers" },
+  { name: "TechCorp Inc.", followers: "$285K portfolio" },
+  { name: "Global Ventures", followers: "$156K portfolio" },
+  { name: "StartupHub LLC", followers: "$98K portfolio" },
 ];
 
 const chartPaths = [
@@ -360,7 +368,7 @@ export default function ContentDashboard() {
           >
             <Box>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                Trending Tracks
+                Top Services
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 Today
@@ -381,7 +389,7 @@ export default function ContentDashboard() {
                   justifyContent: "center",
                 }}
               >
-                {track.image}
+                <track.icon sx={{ color: "white", fontSize: 28 }} />
               </Box>
               <Box sx={{ flex: 1 }}>
                 <Typography variant="body2" sx={{ fontWeight: "bold" }}>
@@ -411,7 +419,7 @@ export default function ContentDashboard() {
           >
             <Box>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                Trending Users
+                Top Clients
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 Today
@@ -449,10 +457,10 @@ export default function ContentDashboard() {
           >
             <Box>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                User Activity
+                Transaction Volume
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                New Tracks
+                Daily Activity
               </Typography>
             </Box>
             <Typography variant="caption">...</Typography>

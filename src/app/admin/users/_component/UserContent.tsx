@@ -18,86 +18,91 @@ const userData = [
   {
     id: 1,
     name: "John Smith",
-    email: "john.smith@example.com",
+    email: "john.smith@techcorp.com",
     status: "Active",
     tracks: 45,
-    followers: "12.5K",
+    followers: "$125K",
     joined: "2024-01-15",
   },
   {
     id: 2,
     name: "Sarah Johnson",
-    email: "sarah.j@example.com",
+    email: "sarah.j@ventures.com",
     status: "Active",
     tracks: 32,
-    followers: "8.2K",
+    followers: "$82K",
     joined: "2024-02-20",
   },
   {
     id: 3,
     name: "Mike Williams",
-    email: "mike.w@example.com",
+    email: "mike.w@global.com",
     status: "Inactive",
     tracks: 18,
-    followers: "3.1K",
+    followers: "$31K",
     joined: "2024-03-10",
   },
   {
     id: 4,
     name: "Emily Davis",
-    email: "emily.d@example.com",
+    email: "emily.d@innovations.com",
     status: "Active",
     tracks: 67,
-    followers: "25.3K",
+    followers: "$253K",
     joined: "2023-12-05",
   },
   {
     id: 5,
     name: "Chris Brown",
-    email: "chris.b@example.com",
+    email: "chris.b@enterprise.com",
     status: "Active",
     tracks: 89,
-    followers: "42.7K",
+    followers: "$427K",
     joined: "2023-11-22",
   },
   {
     id: 6,
     name: "Lisa Anderson",
-    email: "lisa.a@example.com",
+    email: "lisa.a@startup.com",
     status: "Pending",
     tracks: 5,
-    followers: "892",
+    followers: "$8.9K",
     joined: "2024-04-01",
   },
   {
     id: 7,
     name: "David Martinez",
-    email: "david.m@example.com",
+    email: "david.m@consulting.com",
     status: "Active",
     tracks: 53,
-    followers: "15.8K",
+    followers: "$158K",
     joined: "2024-01-30",
   },
   {
     id: 8,
     name: "Jessica Taylor",
-    email: "jessica.t@example.com",
+    email: "jessica.t@holdings.com",
     status: "Active",
     tracks: 41,
-    followers: "18.4K",
+    followers: "$184K",
     joined: "2024-02-14",
   },
 ];
 
 const statsData = [
-  { label: "Total Users", value: "2.05M", percentage: 68, color: "#6366f1" },
-  { label: "Active Users", value: "1.42M", percentage: 85, color: "#10b981" },
+  { label: "Total Clients", value: "15.2K", percentage: 68, color: "#6366f1" },
+  {
+    label: "Active Accounts",
+    value: "12.8K",
+    percentage: 85,
+    color: "#10b981",
+  },
 ];
 
 const pieChartData = [
-  { label: "Active", value: 1420000, percentage: 69.3, color: "#10b981" },
-  { label: "Inactive", value: 430000, percentage: 21, color: "#ef4444" },
-  { label: "Pending", value: 200000, percentage: 9.7, color: "#f59e0b" },
+  { label: "Premium", value: 1420000, percentage: 69.3, color: "#10b981" },
+  { label: "Standard", value: 430000, percentage: 21, color: "#6366f1" },
+  { label: "Trial", value: 200000, percentage: 9.7, color: "#f59e0b" },
 ];
 
 export default function UserContent() {
@@ -112,7 +117,7 @@ export default function UserContent() {
         }}
       >
         <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-          Users
+          Clients
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Typography>nicklemykayiranga@gmail.com</Typography>
@@ -183,8 +188,8 @@ export default function UserContent() {
 
         {/* Pie Chart */}
         <Paper sx={{ p: 3, borderRadius: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-            User Status
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            Account Tiers
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
             <Box sx={{ position: "relative", width: 140, height: 140 }}>
@@ -241,21 +246,21 @@ export default function UserContent() {
       <Paper sx={{ borderRadius: 2 }}>
         <Box sx={{ p: 3, borderBottom: "1px solid #e5e7eb" }}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            All Users
+            All Clients
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            Manage and view all registered users
+            Manage and view all registered clients
           </Typography>
         </Box>
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow sx={{ bgcolor: "#f9fafb" }}>
-                <TableCell sx={{ fontWeight: "bold" }}>User</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Client</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Tracks</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Followers</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Transactions</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Portfolio</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Joined</TableCell>
               </TableRow>
             </TableHead>

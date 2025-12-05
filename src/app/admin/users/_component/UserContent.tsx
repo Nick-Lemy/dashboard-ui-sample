@@ -92,8 +92,12 @@ const userData = [
 const statsData = [
   { label: "Total Users", value: "2.05M", percentage: 68, color: "#6366f1" },
   { label: "Active Users", value: "1.42M", percentage: 85, color: "#10b981" },
-  { label: "Premium Users", value: "485K", percentage: 45, color: "#f59e0b" },
-  { label: "New This Month", value: "257K", percentage: 92, color: "#ec4899" },
+];
+
+const pieChartData = [
+  { label: "Active", value: 1420000, percentage: 69.3, color: "#10b981" },
+  { label: "Inactive", value: 430000, percentage: 21, color: "#ef4444" },
+  { label: "Pending", value: 200000, percentage: 9.7, color: "#f59e0b" },
 ];
 
 export default function UserContent() {
@@ -116,11 +120,11 @@ export default function UserContent() {
         </Box>
       </Box>
 
-      {/* Circular Charts */}
+      {/* Stats Cards */}
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
+          gridTemplateColumns: "repeat(3, 1fr)",
           gap: 3,
           mb: 3,
         }}
@@ -176,6 +180,61 @@ export default function UserContent() {
             </Typography>
           </Paper>
         ))}
+
+        {/* Pie Chart */}
+        <Paper sx={{ p: 3, borderRadius: 2 }}>
+          <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+            User Status
+          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+            <Box sx={{ position: "relative", width: 140, height: 140 }}>
+              <svg width="140" height="140" viewBox="0 0 140 140">
+                {pieChartData.map((segment, idx) => {
+                  const prevPercentages = pieChartData
+                    .slice(0, idx)
+                    .reduce((sum, s) => sum + s.percentage, 0);
+                  const rotation = (prevPercentages * 360) / 100;
+                  return (
+                    <circle
+                      key={idx}
+                      cx="70"
+                      cy="70"
+                      r="50"
+                      fill="none"
+                      stroke={segment.color}
+                      strokeWidth="30"
+                      strokeDasharray={`${
+                        (segment.percentage * 314) / 100
+                      } 314`}
+                      transform={`rotate(${rotation - 90} 70 70)`}
+                    />
+                  );
+                })}
+                <circle cx="70" cy="70" r="35" fill="white" />
+              </svg>
+            </Box>
+            <Box sx={{ flex: 1 }}>
+              {pieChartData.map((segment, idx) => (
+                <Box
+                  key={idx}
+                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
+                >
+                  <Box
+                    sx={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: "50%",
+                      bgcolor: segment.color,
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ fontSize: 11 }}>
+                    {segment.label}: {segment.percentage}%
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        </Paper>
       </Box>
 
       {/* Users Table */}

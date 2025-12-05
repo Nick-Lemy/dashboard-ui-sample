@@ -7,17 +7,21 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { useRouter, usePathname } from "next/navigation";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 const menuItems = [
-  { label: "Overview", icon: BarChartIcon, active: true },
-  { label: "Users", icon: PersonIcon },
-  { label: "Settings", icon: SettingsIcon },
+  { label: "Overview", icon: BarChartIcon, path: "/admin" },
+  { label: "Users", icon: PersonIcon, path: "/admin/users" },
+  { label: "Settings", icon: SettingsIcon, path: "/admin/settings" },
 ];
 
 export default function SideBar() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   return (
     <Box
       sx={{
@@ -55,14 +59,16 @@ export default function SideBar() {
       </Box>
 
       <List sx={{ p: 0 }}>
-        {menuItems.map(({ label, icon: Icon, active }) => (
+        {menuItems.map(({ label, icon: Icon, path }) => (
           <ListItemButton
             key={label}
+            onClick={() => router.push(path)}
             sx={{
               borderRadius: 1,
               mb: 0.5,
-              color: active ? "white" : "#9ca3af",
-              bgcolor: active ? "rgba(255,255,255,0.1)" : "transparent",
+              color: pathname === path ? "white" : "#9ca3af",
+              bgcolor:
+                pathname === path ? "rgba(255,255,255,0.1)" : "transparent",
               "&:hover": {
                 bgcolor: "rgba(255,255,255,0.05)",
               },

@@ -103,8 +103,8 @@ export default function ContentDashboard() {
           Overview
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Typography>andrew@rapchat.com</Typography>
-          <Avatar sx={{ width: 32, height: 32, bgcolor: "#1f2937" }}>A</Avatar>
+          <Typography>nicklemykayiranga@gmail.com</Typography>
+          <Avatar sx={{ width: 32, height: 32, bgcolor: "#1f2937" }}>N</Avatar>
         </Box>
       </Box>
 

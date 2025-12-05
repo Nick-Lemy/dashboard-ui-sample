@@ -9,8 +9,18 @@ import {
   Avatar,
   Fade,
   Grow,
+  Tooltip,
 } from "@mui/material";
 import { useState } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+} from "recharts";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import PeopleIcon from "@mui/icons-material/People";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
@@ -86,31 +96,56 @@ const trendingUsers = [
 
 const chartPaths = [
   {
-    // Last 12 Months - smoother, more data points
-    path: "M 0 120 Q 40 140, 80 130 T 160 110 T 240 90 T 320 100 T 400 70 T 500 80",
-    peak: { value: "9200", x: 420, y: 15 },
+    // Last 12 Months
+    data: [
+      { name: "Jan", value: 6200 },
+      { name: "Feb", value: 5800 },
+      { name: "Mar", value: 6400 },
+      { name: "Apr", value: 7200 },
+      { name: "May", value: 7500 },
+      { name: "Jun", value: 8100 },
+      { name: "Jul", value: 8800 },
+      { name: "Aug", value: 9200 },
+    ],
   },
   {
-    // Last 8 Weeks - medium variation
-    path: "M 0 140 Q 60 100, 120 90 T 240 110 T 360 85 T 500 95",
-    peak: { value: "7100", x: 360, y: 25 },
+    // Last 8 Weeks
+    data: [
+      { name: "W1", value: 4800 },
+      { name: "W2", value: 5800 },
+      { name: "W3", value: 6500 },
+      { name: "W4", value: 6100 },
+      { name: "W5", value: 6700 },
+      { name: "W6", value: 7100 },
+      { name: "W7", value: 6800 },
+      { name: "W8", value: 6600 },
+    ],
   },
   {
-    // Last 30 days - more dramatic peaks
-    path: "M 0 150 Q 50 80, 100 60 T 200 100 T 300 80 T 400 120 T 500 100",
-    peak: { value: "5800", x: 100, y: 20 },
+    // Last 30 days
+    data: [
+      { name: "D1", value: 3200 },
+      { name: "D5", value: 4800 },
+      { name: "D10", value: 5800 },
+      { name: "D15", value: 5100 },
+      { name: "D20", value: 4500 },
+      { name: "D25", value: 5200 },
+      { name: "D27", value: 4200 },
+      { name: "D28", value: 3900 },
+      { name: "D29", value: 4400 },
+      { name: "D30", value: 4600 },
+    ],
   },
 ];
 
 export default function ContentDashboard() {
   const [activeTab, setActiveTab] = useState(2);
+  const [hoveredBar, setHoveredBar] = useState<number | null>(null);
   const currentChart = chartPaths[activeTab];
 
   return (
     <Box
       sx={{
-        p: { xs: 2, sm: 3, md: 4 },
-        bgcolor: "#f3f4f6",
         minHeight: "100vh",
         pt: { xs: 10, md: 4 },
       }}
@@ -212,188 +247,81 @@ export default function ContentDashboard() {
           </Box>
 
           {/* Chart */}
+          {/* Chart */}
           <Fade in timeout={800}>
             <Box>
               <Box
                 sx={{
-                  height: 200,
+                  height: 250,
                   bgcolor: "#f8f9ff",
                   borderRadius: 2,
                   mb: 2,
-                  position: "relative",
-                  display: "flex",
+                  p: 2,
                 }}
               >
-                {/* Y-axis labels */}
-                <Box
-                  sx={{
-                    width: 50,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    py: 1,
-                    pr: 1,
-                  }}
-                >
-                  {[10000, 9000, 8000, 7000, 6000, 5000, 4000].map((num) => (
-                    <Typography
-                      key={num}
-                      variant="caption"
-                      color="text.secondary"
-                      sx={{ fontSize: 10, textAlign: "right" }}
-                    >
-                      {num}
-                    </Typography>
-                  ))}
-                </Box>
-
-                {/* Chart area */}
-                <Box sx={{ flex: 1, position: "relative" }}>
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 500 200"
-                    preserveAspectRatio="none"
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    data={currentChart.data}
+                    margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                   >
                     <defs>
                       <linearGradient
-                        id="gradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="0%"
-                        y2="100%"
+                        id="colorValue"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
                       >
                         <stop
-                          offset="0%"
+                          offset="5%"
                           stopColor="#6366f1"
-                          stopOpacity="0.3"
+                          stopOpacity={0.3}
                         />
                         <stop
-                          offset="100%"
+                          offset="95%"
                           stopColor="#6366f1"
-                          stopOpacity="0.05"
+                          stopOpacity={0}
                         />
                       </linearGradient>
                     </defs>
-                    {/* Horizontal grid lines */}
-                    {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-                      <line
-                        key={i}
-                        x1="0"
-                        y1={i * 33.33}
-                        x2="500"
-                        y2={i * 33.33}
-                        stroke="#e5e7eb"
-                        strokeWidth="1"
-                        opacity="0.5"
-                      />
-                    ))}
-                    <path
-                      d={`${currentChart.path} L 500 200 L 0 200 Z`}
-                      fill="url(#gradient)"
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 11, fill: "#6b7280" }}
+                      axisLine={{ stroke: "#e5e7eb" }}
                     />
-                    <path
-                      d={currentChart.path}
+                    <YAxis
+                      tick={{ fontSize: 11, fill: "#6b7280" }}
+                      axisLine={{ stroke: "#e5e7eb" }}
+                      tickFormatter={(value) => value.toLocaleString()}
+                    />
+                    <RechartsTooltip
+                      contentStyle={{
+                        backgroundColor: "#1f2937",
+                        border: "none",
+                        borderRadius: "8px",
+                        color: "white",
+                      }}
+                      formatter={(value: any) => [
+                        value.toLocaleString(),
+                        "Value",
+                      ]}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="value"
                       stroke="#6366f1"
-                      strokeWidth="3"
-                      fill="none"
+                      strokeWidth={3}
+                      fillOpacity={1}
+                      fill="url(#colorValue)"
+                      activeDot={{ r: 6, fill: "#4f46e5" }}
                     />
-                  </svg>
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: currentChart.peak.y,
-                      left: currentChart.peak.x,
-                      bgcolor: "#4f46e5",
-                      color: "white",
-                      px: 1,
-                      py: 0.5,
-                      borderRadius: 1,
-                      fontSize: 12,
-                      transform: "translateX(-50%)",
-                    }}
-                  >
-                    {currentChart.peak.value}
-                  </Box>
-                </Box>
-              </Box>
-
-              {/* X-axis labels */}
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", px: 7 }}
-              >
-                {activeTab === 0 &&
-                  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"].map(
-                    (month) => (
-                      <Typography
-                        key={month}
-                        variant="caption"
-                        color="text.secondary"
-                        sx={{ fontSize: 10 }}
-                      >
-                        {month}
-                      </Typography>
-                    )
-                  )}
-                {activeTab === 1 &&
-                  [
-                    "Week 1",
-                    "Week 2",
-                    "Week 3",
-                    "Week 4",
-                    "Week 5",
-                    "Week 6",
-                    "Week 7",
-                    "Week 8",
-                  ].map((week) => (
-                    <Typography
-                      key={week}
-                      variant="caption"
-                      color="text.secondary"
-                      sx={{ fontSize: 10 }}
-                    >
-                      {week.replace("Week ", "W")}
-                    </Typography>
-                  ))}
-                {activeTab === 2 &&
-                  [
-                    "10",
-                    "11",
-                    "12",
-                    "13",
-                    "24",
-                    "25",
-                    "26",
-                    "27",
-                    "28",
-                    "29",
-                    "30",
-                    "01",
-                    "02",
-                    "03",
-                    "04",
-                    "05",
-                    "06",
-                    "07",
-                    "08",
-                  ].map(
-                    (day, idx) =>
-                      idx % 2 === 0 && (
-                        <Typography
-                          key={day}
-                          variant="caption"
-                          color="text.secondary"
-                          sx={{ fontSize: 10 }}
-                        >
-                          {day}
-                        </Typography>
-                      )
-                  )}
+                  </AreaChart>
+                </ResponsiveContainer>
               </Box>
             </Box>
           </Fade>
         </Paper>
-
         {/* Stats Cards */}
         <Paper sx={{ p: 3, borderRadius: 2 }}>
           {kpiData.map((item, idx) => (
@@ -577,25 +505,57 @@ export default function ContentDashboard() {
                   height: 150,
                 }}
               >
-                {[60, 80, 50, 90, 70, 100, 85].map((height, idx) => (
-                  <Box
+                {[
+                  { height: 60, value: 612, day: "Sunday" },
+                  { height: 80, value: 824, day: "Monday" },
+                  { height: 50, value: 503, day: "Tuesday" },
+                  { height: 90, value: 945, day: "Wednesday" },
+                  { height: 70, value: 721, day: "Thursday" },
+                  { height: 100, value: 1056, day: "Friday" },
+                  { height: 85, value: 892, day: "Saturday" },
+                ].map((bar, idx) => (
+                  <Tooltip
                     key={idx}
-                    sx={{
-                      flex: 1,
-                      bgcolor: "#6366f1",
-                      borderRadius: "4px 4px 0 0",
-                      height: `${height}%`,
-                      animation: `growHeight 0.8s ease-out ${idx * 0.1}s both`,
-                      "@keyframes growHeight": {
-                        from: {
-                          height: "0%",
+                    title={
+                      <Box sx={{ p: 0.5 }}>
+                        <Typography
+                          variant="caption"
+                          sx={{ fontWeight: "bold", display: "block" }}
+                        >
+                          {bar.day}
+                        </Typography>
+                        <Typography variant="caption">
+                          {bar.value} transactions
+                        </Typography>
+                      </Box>
+                    }
+                    arrow
+                    placement="top"
+                  >
+                    <Box
+                      onMouseEnter={() => setHoveredBar(idx)}
+                      onMouseLeave={() => setHoveredBar(null)}
+                      sx={{
+                        flex: 1,
+                        bgcolor: hoveredBar === idx ? "#4f46e5" : "#6366f1",
+                        borderRadius: "4px 4px 0 0",
+                        height: `${bar.height}%`,
+                        cursor: "pointer",
+                        transition: "all 0.3s",
+                        animation: `growHeight 0.8s ease-out ${
+                          idx * 0.1
+                        }s both`,
+                        "@keyframes growHeight": {
+                          from: {
+                            height: "0%",
+                          },
+                          to: {
+                            height: `${bar.height}%`,
+                          },
                         },
-                        to: {
-                          height: `${height}%`,
-                        },
-                      },
-                    }}
-                  />
+                      }}
+                    />
+                  </Tooltip>
                 ))}
               </Box>
             </Box>

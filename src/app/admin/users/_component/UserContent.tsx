@@ -22,6 +22,7 @@ import {
   FormControl,
   InputLabel,
   useTheme,
+  Tooltip,
 } from "@mui/material";
 import { useState, useMemo } from "react";
 import SearchIcon from "@mui/icons-material/Search";
@@ -125,6 +126,8 @@ export default function UserContent() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [sortBy, setSortBy] = useState("name");
   const [darkMode, setDarkMode] = useState(false);
+  const [hoveredStat, setHoveredStat] = useState<number | null>(null);
+  const [hoveredSegment, setHoveredSegment] = useState<number | null>(null);
 
   const filteredUsers = useMemo(() => {
     return userData
@@ -224,58 +227,87 @@ export default function UserContent() {
                 bgcolor: paperBg,
               }}
             >
-              <Box sx={{ position: "relative", display: "inline-flex", mb: 2 }}>
-                <svg width="120" height="120" viewBox="0 0 120 120">
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    fill="none"
-                    stroke="#e5e7eb"
-                    strokeWidth="10"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    fill="none"
-                    stroke={stat.color}
-                    strokeWidth="10"
-                    strokeDasharray={`${(stat.percentage * 314) / 100} 314`}
-                    strokeLinecap="round"
-                    transform="rotate(-90 60 60)"
-                    style={{
-                      animation: "drawCircle 1.5s ease-out forwards",
-                      strokeDashoffset: 314,
-                    }}
-                  />
-                  <style>{`
+              <Tooltip
+                title={
+                  <Box sx={{ p: 0.5 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ fontWeight: "bold", display: "block" }}
+                    >
+                      {stat.label}
+                    </Typography>
+                    <Typography variant="caption">
+                      {stat.value} ({stat.percentage}% of target)
+                    </Typography>
+                  </Box>
+                }
+                arrow
+                placement="top"
+              >
+                <Box
+                  sx={{
+                    position: "relative",
+                    display: "inline-flex",
+                    mb: 2,
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={() => setHoveredStat(idx)}
+                  onMouseLeave={() => setHoveredStat(null)}
+                >
+                  <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="10"
+                    />
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke={stat.color}
+                      strokeWidth={hoveredStat === idx ? "12" : "10"}
+                      strokeDasharray={`${(stat.percentage * 314) / 100} 314`}
+                      strokeLinecap="round"
+                      transform="rotate(-90 60 60)"
+                      style={{
+                        animation: "drawCircle 1.5s ease-out forwards",
+                        strokeDashoffset: 314,
+                        transition: "stroke-width 0.3s",
+                      }}
+                    />
+                    <style>{`
                   @keyframes drawCircle {
                     to {
                       stroke-dashoffset: ${314 - (stat.percentage * 314) / 100};
                     }
                   }
                 `}</style>
-                </svg>
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography
-                    variant="h5"
-                    sx={{ fontWeight: "bold", color: stat.color }}
+                  </svg>
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
                   >
-                    {stat.percentage}%
-                  </Typography>
+                    <Typography
+                      variant="h5"
+                      sx={{ fontWeight: "bold", color: stat.color }}
+                    >
+                      {stat.percentage}%
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
+                {/* </Box> */}
+              </Tooltip>
               <Typography
                 variant="h6"
                 sx={{ fontWeight: "bold", mb: 0.5, color: textColor }}
@@ -307,19 +339,44 @@ export default function UserContent() {
                       .reduce((sum, s) => sum + s.percentage, 0);
                     const rotation = (prevPercentages * 360) / 100;
                     return (
-                      <circle
+                      <Tooltip
                         key={idx}
-                        cx="70"
-                        cy="70"
-                        r="50"
-                        fill="none"
-                        stroke={segment.color}
-                        strokeWidth="30"
-                        strokeDasharray={`${
-                          (segment.percentage * 314) / 100
-                        } 314`}
-                        transform={`rotate(${rotation - 90} 70 70)`}
-                      />
+                        title={
+                          <Box sx={{ p: 0.5 }}>
+                            <Typography
+                              variant="caption"
+                              sx={{ fontWeight: "bold", display: "block" }}
+                            >
+                              {segment.label}
+                            </Typography>
+                            <Typography variant="caption">
+                              ${(segment.value / 1000).toFixed(1)}K (
+                              {segment.percentage}%)
+                            </Typography>
+                          </Box>
+                        }
+                        arrow
+                        placement="top"
+                      >
+                        <circle
+                          cx="70"
+                          cy="70"
+                          r="50"
+                          fill="none"
+                          stroke={segment.color}
+                          strokeWidth={hoveredSegment === idx ? "35" : "30"}
+                          strokeDasharray={`${
+                            (segment.percentage * 314) / 100
+                          } 314`}
+                          transform={`rotate(${rotation - 90} 70 70)`}
+                          onMouseEnter={() => setHoveredSegment(idx)}
+                          onMouseLeave={() => setHoveredSegment(null)}
+                          style={{
+                            cursor: "pointer",
+                            transition: "stroke-width 0.3s",
+                          }}
+                        />
+                      </Tooltip>
                     );
                   })}
                   <circle cx="70" cy="70" r="35" fill="white" />

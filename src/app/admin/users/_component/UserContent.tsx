@@ -107,20 +107,42 @@ const pieChartData = [
 
 export default function UserContent() {
   return (
-    <Box sx={{ p: 4, bgcolor: "#f3f4f6", minHeight: "100vh" }}>
+    <Box
+      sx={{
+        p: { xs: 2, sm: 3, md: 4 },
+        bgcolor: "#f3f4f6",
+        minHeight: "100vh",
+        pt: { xs: 10, md: 4 },
+      }}
+    >
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: { xs: "flex-start", sm: "center" },
+          gap: 2,
           mb: 3,
         }}
       >
-        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            fontSize: { xs: "1.5rem", md: "2.125rem" },
+          }}
+        >
           Clients
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Typography>nicklemykayiranga@gmail.com</Typography>
+          <Typography
+            sx={{
+              display: { xs: "none", sm: "block" },
+              fontSize: { sm: "0.875rem", md: "1rem" },
+            }}
+          >
+            nicklemykayiranga@gmail.com
+          </Typography>
           <Avatar sx={{ width: 32, height: 32, bgcolor: "#1f2937" }}>N</Avatar>
         </Box>
       </Box>
@@ -129,7 +151,11 @@ export default function UserContent() {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
+            lg: "repeat(3, 1fr)",
+          },
           gap: 3,
           mb: 3,
         }}
@@ -243,16 +269,23 @@ export default function UserContent() {
       </Box>
 
       {/* Users Table */}
-      <Paper sx={{ borderRadius: 2 }}>
-        <Box sx={{ p: 3, borderBottom: "1px solid #e5e7eb" }}>
-          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+      <Paper sx={{ borderRadius: 2, overflow: "hidden" }}>
+        <Box sx={{ p: { xs: 2, md: 3 }, borderBottom: "1px solid #e5e7eb" }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "bold", fontSize: { xs: "1rem", md: "1.25rem" } }}
+          >
             All Clients
           </Typography>
-          <Typography variant="caption" color="text.secondary">
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontSize: { xs: "0.7rem", md: "0.75rem" } }}
+          >
             Manage and view all registered clients
           </Typography>
         </Box>
-        <TableContainer>
+        <TableContainer sx={{ overflowX: "auto" }}>
           <Table>
             <TableHead>
               <TableRow sx={{ bgcolor: "#f9fafb" }}>

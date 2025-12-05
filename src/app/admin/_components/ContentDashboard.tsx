@@ -98,25 +98,53 @@ export default function ContentDashboard() {
   const currentChart = chartPaths[activeTab];
 
   return (
-    <Box sx={{ p: 4, bgcolor: "#f3f4f6", minHeight: "100vh" }}>
+    <Box
+      sx={{
+        p: { xs: 2, sm: 3, md: 4 },
+        bgcolor: "#f3f4f6",
+        minHeight: "100vh",
+        pt: { xs: 10, md: 4 },
+      }}
+    >
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: { xs: "flex-start", sm: "center" },
+          gap: 2,
           mb: 3,
         }}
       >
-        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            fontSize: { xs: "1.5rem", md: "2.125rem" },
+          }}
+        >
           Overview
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Typography>nicklemykayiranga@gmail.com</Typography>
+          <Typography
+            sx={{
+              display: { xs: "none", sm: "block" },
+              fontSize: { sm: "0.875rem", md: "1rem" },
+            }}
+          >
+            nicklemykayiranga@gmail.com
+          </Typography>
           <Avatar sx={{ width: 32, height: 32, bgcolor: "#1f2937" }}>N</Avatar>
         </Box>
       </Box>
 
-      <Box sx={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 3 }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", lg: "2fr 1fr" },
+          gap: 3,
+        }}
+      >
         {/* KPIs Section */}
         <Paper sx={{ p: 3, borderRadius: 2 }}>
           <Box
@@ -135,18 +163,41 @@ export default function ContentDashboard() {
                 as of 18 May 2020, 09:41 PM
               </Typography>
             </Box>
-            <Tabs value={activeTab} onChange={(e, v) => setActiveTab(v)}>
+            <Tabs
+              value={activeTab}
+              onChange={(e, v) => setActiveTab(v)}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                minHeight: { xs: 36, md: 48 },
+                "& .MuiTab-root": {
+                  fontSize: { xs: "0.75rem", md: "0.875rem" },
+                },
+              }}
+            >
               <Tab
                 label="Last 12 Months"
-                sx={{ textTransform: "none", minWidth: "auto" }}
+                sx={{
+                  textTransform: "none",
+                  minWidth: "auto",
+                  px: { xs: 1, md: 2 },
+                }}
               />
               <Tab
                 label="Last 8 Weeks"
-                sx={{ textTransform: "none", minWidth: "auto" }}
+                sx={{
+                  textTransform: "none",
+                  minWidth: "auto",
+                  px: { xs: 1, md: 2 },
+                }}
               />
               <Tab
                 label="Last 30 days"
-                sx={{ textTransform: "none", minWidth: "auto" }}
+                sx={{
+                  textTransform: "none",
+                  minWidth: "auto",
+                  px: { xs: 1, md: 2 },
+                }}
               />
             </Tabs>
           </Box>
@@ -351,7 +402,11 @@ export default function ContentDashboard() {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateColumns: {
+            xs: "1fr",
+            md: "repeat(2, 1fr)",
+            lg: "repeat(3, 1fr)",
+          },
           gap: 3,
           mt: 3,
         }}

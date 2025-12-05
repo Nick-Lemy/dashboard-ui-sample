@@ -6,11 +6,18 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Drawer,
+  IconButton,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useRouter, usePathname } from "next/navigation";
+import { useState } from "react";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const menuItems = [
   { label: "Overview", icon: BarChartIcon, path: "/admin" },
@@ -21,8 +28,22 @@ const menuItems = [
 export default function SideBar() {
   const router = useRouter();
   const pathname = usePathname();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  return (
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  };
+
+  const sidebarContent = (
     <Box
       sx={{
         width: 240,
@@ -48,21 +69,29 @@ export default function SideBar() {
       <Box
         sx={{
           display: "flex",
+          justifyContent: "space-between",
           alignItems: "center",
-          gap: 1,
-          mb: 4,
-          color: "white",
+          mb: 2,
         }}
       >
-        <Box sx={{ fontSize: 24, fontWeight: "bold" }}>RC</Box>
-        <Box sx={{ fontSize: 18 }}>RAPCHAT</Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box sx={{ fontSize: 24, fontWeight: "bold", color: "white" }}>
+            RC
+          </Box>
+          <Box sx={{ fontSize: 18, color: "white" }}>RAPCHAT</Box>
+        </Box>
+        {isMobile && (
+          <IconButton onClick={handleDrawerToggle} sx={{ color: "white" }}>
+            <CloseIcon />
+          </IconButton>
+        )}
       </Box>
 
-      <List sx={{ p: 0 }}>
+      <List sx={{ p: 0, mt: 2 }}>
         {menuItems.map(({ label, icon: Icon, path }) => (
           <ListItemButton
             key={label}
-            onClick={() => router.push(path)}
+            onClick={() => handleNavigation(path)}
             sx={{
               borderRadius: 1,
               mb: 0.5,
@@ -83,4 +112,40 @@ export default function SideBar() {
       </List>
     </Box>
   );
+
+  if (isMobile) {
+    return (
+      <>
+        <IconButton
+          onClick={handleDrawerToggle}
+          sx={{
+            position: "fixed",
+            top: 16,
+            left: 16,
+            zIndex: 1300,
+            bgcolor: "#2d3142",
+            color: "white",
+            "&:hover": { bgcolor: "#1f2937" },
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Drawer
+          anchor="left"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          sx={{
+            "& .MuiDrawer-paper": {
+              width: 240,
+              boxSizing: "border-box",
+            },
+          }}
+        >
+          {sidebarContent}
+        </Drawer>
+      </>
+    );
+  }
+
+  return sidebarContent;
 }

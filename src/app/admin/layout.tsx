@@ -6,11 +6,11 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex">
-      <div>
+    <div className="flex h-screen overflow-hidden">
+      <div className="flex-shrink-0">
         <SideBar />
       </div>
-      <div className="bg-zinc-200 w-full">{children}</div>
+      <div className="bg-zinc-200 w-full overflow-y-auto">{children}</div>
     </div>
   );
 }
